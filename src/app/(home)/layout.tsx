@@ -1,15 +1,21 @@
 import "@/app/globals.css";
+import Navbar from "@/components/common/Navbar";
+import { TailwindIndicator } from "@/components/common/TailwindIndicator";
+import { BannerCarousel } from "@/components/home/BannerCarousel";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Urbanist } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const urbanist = Urbanist({
   subsets: ["latin"],
+  variable: "--font-urbanist",
+  weight: ["300", "400", "500", "600", "700"], // Light, Regular, Medium, Semibold, Bold
+  display: "swap",
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700"], // Light, Regular, Medium, Semibold, Bold
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -25,9 +31,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${urbanist.variable} ${inter.variable} min-h-screen bg-background font-sans antialiased`}
       >
-        {children}
+        <TailwindIndicator /> {/* for development only */}
+        <Navbar />
+        <main className="container max-w-7xl mx-auto px-4 ">
+          <BannerCarousel />
+          {children}
+        </main>
       </body>
     </html>
   );
