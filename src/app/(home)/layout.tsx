@@ -1,7 +1,6 @@
 import "@/app/globals.css";
 import Navbar from "@/components/common/Navbar";
 import { TailwindIndicator } from "@/components/common/TailwindIndicator";
-import { BannerCarousel } from "@/components/home/BannerCarousel";
 import type { Metadata } from "next";
 import { Inter, Urbanist } from "next/font/google";
 
@@ -35,8 +34,7 @@ export default function RootLayout({
       >
         <TailwindIndicator /> {/* for development only */}
         <Navbar />
-        <main className="container max-w-7xl mx-auto px-4 ">
-          <BannerCarousel />
+        <main className="container mx-auto px-1 md:px-3 lg:px-4 ">
           {children}
         </main>
       </body>

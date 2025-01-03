@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Search, ShoppingBag, User, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -24,14 +25,12 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="border-b">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="border-b border-b-gray-200 py-2 bg-slate-50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href="/" className="text-xl font-bold">
-              KitchenRack
-            </Link>
+            <Image src="/logo.png" alt="Logo" width={100} height={100} />
           </div>
 
           {/* Desktop Navigation */}
@@ -68,7 +67,7 @@ const Navbar = () => {
 
             <Link href="/cart" className="relative">
               <ShoppingBag className="h-6 w-6" />
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
                 0
               </span>
             </Link>
