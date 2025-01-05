@@ -7,52 +7,48 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-interface CustomCarouselProps {
+interface ProductCarouselProps {
   items: React.ReactNode[];
   autoplay?: boolean;
   interval?: number;
   showDots?: boolean;
   showArrows?: boolean;
-  itemsToShow?: number;
 }
 
-export function CustomCarousel({
+export function ProductCarousel({
   items,
   autoplay = true,
   interval = 6000,
   showDots = true,
   showArrows = false,
-  itemsToShow = 1,
-}: CustomCarouselProps) {
-  console.log("🚀 ~ items:", items);
-  console.log("🚀 ~ itemsToShow:", itemsToShow);
+}: ProductCarouselProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  // useEffect(() => {
-  //   if (!api) {
-  //     return;
-  //   }
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
 
-  //   api.on("select", () => {
-  //     setCurrent(api.selectedScrollSnap());
-  //   });
-  // }, [api]);
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
 
-  // useEffect(() => {
-  //   if (!api || !autoplay || isPaused) {
-  //     return;
-  //   }
+  useEffect(() => {
+    if (!api || !autoplay || isPaused) {
+      return;
+    }
 
-  //   const autoplayInterval = setInterval(() => {
-  //     api.scrollNext();
-  //   }, interval);
+    const autoplayInterval = setInterval(() => {
+      api.scrollNext();
+    }, interval);
 
-  //   return () => clearInterval(autoplayInterval);
-  // }, [api, autoplay, interval, isPaused]);
+    return () => clearInterval(autoplayInterval);
+  }, [api, autoplay, interval, isPaused]);
 
   return (
     <div
@@ -68,30 +64,16 @@ export function CustomCarousel({
         }}
         setApi={setApi}
       >
-        <CarouselContent
-          className={cn(itemsToShow > 1 && "-ml-1 md:-ml-2 lg:-ml-3 xl:-ml-3")}
-        >
+        <CarouselContent>
           {items.map((item, index) => (
-            <CarouselItem
-              key={index}
-              className={cn(
-                itemsToShow > 1 &&
-                  `pl-1 md:pl-2 lg:pl-3 xl:pl-3 basis-full md:basis-1/${
-                    itemsToShow - 2
-                  } lg:basis-1/${itemsToShow - 1} xl:basis-1/${itemsToShow}`
-              )}
-            >
-              {itemsToShow > 1 ? (
-                item
-              ) : (
-                <div
-                  className={cn(
-                    "relative aspect-[14/6] sm:aspect-[16/5] lg:aspect-[16/5]"
-                  )}
-                >
-                  {item}
-                </div>
-              )}
+            <CarouselItem key={index}>
+              <div
+                className={cn(
+                  "relative aspect-[14/6] sm:aspect-[16/5] lg:aspect-[16/5]"
+                )}
+              >
+                {item}
+              </div>
             </CarouselItem>
           ))}
         </CarouselContent>

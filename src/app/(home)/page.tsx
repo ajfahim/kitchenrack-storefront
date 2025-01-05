@@ -1,6 +1,7 @@
 import { BannerCarousel } from "@/components/home/BannerCarousel";
 import HomePageCategorySlider from "@/components/home/HomePageCategorySlider";
 import { HomePageSection } from "@/components/home/HomePageSection";
+import { CustomCarousel } from "@/components/ui/custom-carousel";
 import ProductCard from "@/components/ui/ProductCard"; // Added import statement
 
 const categories = [
@@ -105,6 +106,17 @@ const trendingProducts = [
   // Add more products as needed
 ];
 
+const featuredProducts = trendingProducts.map((product) => (
+  <ProductCard
+    key={product.name}
+    name={product.name}
+    image={product.image}
+    price={product.price}
+    unit={product.unit}
+    href={product.href}
+  />
+));
+
 export default function Home() {
   return (
     <div className="my-4 space-y-24">
@@ -141,6 +153,20 @@ export default function Home() {
             />
           ))}
         </div>
+      </HomePageSection>
+
+      {/* Featured products section  */}
+      <HomePageSection
+        title="Our Featured Products"
+        showExploreAll
+        link="/products"
+      >
+        <CustomCarousel
+          itemsToShow={3}
+          showArrows
+          items={featuredProducts}
+          showDots={false}
+        />
       </HomePageSection>
     </div>
   );
