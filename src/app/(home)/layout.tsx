@@ -1,4 +1,5 @@
 import "@/app/globals.css";
+import Footer from "@/components/common/Footer";
 import Navbar from "@/components/common/Navbar";
 import { TailwindIndicator } from "@/components/common/TailwindIndicator";
 import type { Metadata } from "next";
@@ -37,6 +38,7 @@ export default function RootLayout({
         <main className="container mx-auto px-1 md:px-3 lg:px-4 ">
           {children}
         </main>
+        <Footer />
       </body>
     </html>
   );
