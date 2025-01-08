@@ -7,7 +7,8 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import Autoplay from "embla-carousel-autoplay";
+import { useEffect, useState } from "react";
 
 interface CustomCarouselProps {
   items: React.ReactNode[];
@@ -15,7 +16,7 @@ interface CustomCarouselProps {
   interval?: number;
   showDots?: boolean;
   showArrows?: boolean;
-  itemsToShow?: number;
+  type?: "banner" | "product";
 }
 
 export function CustomCarousel({
@@ -24,23 +25,21 @@ export function CustomCarousel({
   interval = 6000,
   showDots = true,
   showArrows = false,
-  itemsToShow = 1,
+  type = "banner",
 }: CustomCarouselProps) {
   console.log("🚀 ~ items:", items);
-  console.log("🚀 ~ itemsToShow:", itemsToShow);
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
 
-  // useEffect(() => {
-  //   if (!api) {
-  //     return;
-  //   }
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
 
-  //   api.on("select", () => {
-  //     setCurrent(api.selectedScrollSnap());
-  //   });
-  // }, [api]);
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
 
   // useEffect(() => {
   //   if (!api || !autoplay || isPaused) {
@@ -55,38 +54,47 @@ export function CustomCarousel({
   // }, [api, autoplay, interval, isPaused]);
 
   return (
-    <div
-      className="relative group"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
+    <div className="relative group">
       <Carousel
         className={cn("w-full relative")}
-        opts={{
-          loop: true,
-          align: "center",
-        }}
+        // opts={{
+        //   loop: true,
+        //   align: "center",
+        // }}
+        plugins={
+          autoplay
+            ? [
+                Autoplay({
+                  delay: interval,
+                  stopOnMouseEnter: true,
+                  stopOnInteraction: false,
+                }),
+              ]
+            : undefined
+        }
         setApi={setApi}
       >
         <CarouselContent
-          className={cn(itemsToShow > 1 && "-ml-1 md:-ml-2 lg:-ml-3 xl:-ml-3")}
+          className={cn(
+            type === "product" && "pb-4 -ml-1 md:-ml-2 lg:-ml-3 xl:-ml-3"
+          )}
         >
           {items.map((item, index) => (
             <CarouselItem
               key={index}
               className={cn(
-                itemsToShow > 1 &&
-                  `pl-1 md:pl-2 lg:pl-3 xl:pl-3 basis-full md:basis-1/${
-                    itemsToShow - 2
-                  } lg:basis-1/${itemsToShow - 1} xl:basis-1/${itemsToShow}`
+                type === "product" &&
+                  `pl-1 md:pl-2 lg:pl-3 xl:pl-3 basis-full md:basis-1/2
+                  lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5`
               )}
             >
-              {itemsToShow > 1 ? (
+              {type === "product" ? (
                 item
               ) : (
                 <div
                   className={cn(
-                    "relative aspect-[14/6] sm:aspect-[16/5] lg:aspect-[16/5]"
+                    type === "banner" &&
+                      "relative aspect-[14/6] sm:aspect-[16/5] lg:aspect-[16/5]"
                   )}
                 >
                   {item}
@@ -158,7 +166,8 @@ export function CustomCarousel({
         {showDots && (
           <div
             className={cn(
-              "bg-background px-3 py-2 md:px-5 md:py-3 rounded-full absolute -bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20"
+              "bg-background px-3 py-2 md:px-5 md:py-3 rounded-full absolute  left-1/2 -translate-x-1/2 flex gap-2 z-20",
+              type === "banner" ? "-bottom-4" : ""
             )}
           >
             {items.map((_, index) => (

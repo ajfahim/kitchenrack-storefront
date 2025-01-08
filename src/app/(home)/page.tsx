@@ -122,7 +122,6 @@ export default function Home() {
     <div className="my-4 space-y-24">
       {/* hero banner  */}
       <BannerCarousel />
-
       {/* top categories section  */}
       <HomePageSection
         title="Our Top Categories"
@@ -133,9 +132,7 @@ export default function Home() {
           <HomePageCategorySlider categories={categories} />
         </div>
       </HomePageSection>
-
       {/* trending products section  */}
-
       <HomePageSection
         title="Our Trending Products"
         showExploreAll
@@ -154,7 +151,6 @@ export default function Home() {
           ))}
         </div>
       </HomePageSection>
-
       {/* Featured products section  */}
       <HomePageSection
         title="Our Featured Products"
@@ -162,10 +158,10 @@ export default function Home() {
         link="/products"
       >
         <CustomCarousel
-          itemsToShow={3}
           showArrows
           items={featuredProducts}
           showDots={false}
+          type="product"
         />
       </HomePageSection>
     </div>
