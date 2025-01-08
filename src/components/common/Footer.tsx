@@ -84,6 +84,9 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      <div className="text-center py-3 border-t border-t-text">
+        All rights reserved &copy; {year} {siteInfo.name}
+      </div>
     </footer>
   );
 };
