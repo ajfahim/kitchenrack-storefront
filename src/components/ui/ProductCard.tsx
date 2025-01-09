@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { Button } from "./button";
 
@@ -18,7 +19,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
   href,
 }) => {
   return (
-    <div className=" rounded-2xl bg-background max-w-[312px] shadow-lg p-4 flex flex-col justify-center items-center">
+    <Link
+      href={href}
+      className=" rounded-2xl bg-background max-w-[312px] shadow-lg p-4 flex flex-col justify-center items-center"
+    >
       <div className="bg-gray-200 rounded-2xl p-4 mb-5 flex items-center justify-center w-[280px] h-[270px]">
         <Image
           src={image}
@@ -37,7 +41,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </p>
         <Button>Add to Cart</Button>
       </div>
-    </div>
+    </Link>
   );
 };
 
