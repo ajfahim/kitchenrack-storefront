@@ -1,4 +1,5 @@
 import { BannerCarousel } from "@/components/home/BannerCarousel";
+import HomeBanner from "@/components/home/HomeBanner";
 import HomePageCategorySlider from "@/components/home/HomePageCategorySlider";
 import { HomePageSection } from "@/components/home/HomePageSection";
 import { CustomCarousel } from "@/components/ui/custom-carousel";
@@ -151,6 +152,9 @@ export default function Home() {
           ))}
         </div>
       </HomePageSection>
+      {/* Home banners section  */}
+      <HomeBanner />
+
       {/* Featured products section  */}
       <HomePageSection
         title="Our Featured Products"
