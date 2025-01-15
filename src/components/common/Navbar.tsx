@@ -60,14 +60,12 @@ const Navbar = () => {
           <div className="flex items-center space-x-4">
             {/* Cart Total */}
             <div className="hidden md:flex items-center mr-2">
-              <span className="text-sm font-medium">
-                {formatTaka(cartTotal)}
-              </span>
+              <span className="text-sm font-bold">{formatTaka(cartTotal)}</span>
             </div>
 
             <Link href="/cart" className="relative">
               <ShoppingBag className="h-6 w-6" />
-              <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-accent text-accent-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
                 0
               </span>
             </Link>

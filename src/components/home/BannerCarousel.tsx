@@ -7,6 +7,9 @@ const bannerSlides = [
   "/banners/banner1.jpg",
   "/banners/banner2.jpg",
   "/banners/banner3.jpg",
+  "/banners/banner4.webp",
+  "/banners/banner5.webp",
+  "/banners/hi.webp",
   // Add more banner images as needed
 ];
 

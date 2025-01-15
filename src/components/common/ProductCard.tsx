@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { Button } from "./button";
+import { Button } from "../ui/button";
 
 interface ProductCardProps {
   name: string;
@@ -23,13 +23,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
       href={href}
       className=" rounded-2xl bg-background max-w-[312px] shadow-lg p-4 flex flex-col justify-center items-center"
     >
-      <div className="bg-gray-200 rounded-2xl p-4 mb-5 flex items-center justify-center w-[280px] h-[270px]">
+      <div className="bg-gray-200 rounded-2xl p-4 mb-5 flex items-center justify-center size-[280px] overflow-hidden">
         <Image
           src={image}
           alt={name}
-          width={300}
-          height={200}
-          className="object-cover"
+          width={280}
+          height={270}
+          className="object-contain"
         />
       </div>
       <div className="text-center w-full">

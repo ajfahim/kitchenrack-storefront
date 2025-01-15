@@ -1,9 +1,9 @@
+import ProductCard from "@/components/common/ProductCard"; // Added import statement
 import { BannerCarousel } from "@/components/home/BannerCarousel";
 import HomeBanner from "@/components/home/HomeBanner";
 import HomePageCategorySlider from "@/components/home/HomePageCategorySlider";
 import { HomePageSection } from "@/components/home/HomePageSection";
 import { CustomCarousel } from "@/components/ui/custom-carousel";
-import ProductCard from "@/components/ui/ProductCard"; // Added import statement
 
 const categories = [
   {
@@ -40,7 +40,7 @@ const categories = [
 
 const trendingProducts = [
   {
-    name: "Organic Almonds",
+    name: "Organic Almognds",
     image: "/products/almond.png",
     price: "15.99",
     unit: "kg",
@@ -56,7 +56,7 @@ const trendingProducts = [
     href: "/products/raw-cashews",
   },
   {
-    name: "Dried Cranberries",
+    name: "Dried Cranaberries",
     image: "/products/walnut.png",
     price: "8.99",
     unit: "kg",
@@ -73,7 +73,7 @@ const trendingProducts = [
   },
 
   {
-    name: "Raw Cashews",
+    name: "Raw Cashewss",
     image: "/products/cashew.png",
     price: "12.99",
     unit: "kg",
@@ -81,7 +81,7 @@ const trendingProducts = [
     href: "/products/raw-cashews",
   },
   {
-    name: "Dried Cranberries",
+    name: "Dried Cranbersries",
     image: "/products/walnut.png",
     price: "8.99",
     unit: "kg",
@@ -89,7 +89,7 @@ const trendingProducts = [
     href: "/products/dried-cranberries",
   },
   {
-    name: "Organic Almonds",
+    name: "Organics Almonds",
     image: "/products/almond.png",
     price: "15.99",
     unit: "kg",
@@ -97,8 +97,24 @@ const trendingProducts = [
     href: "/products/organic-almonds",
   },
   {
-    name: "Raw Cashews",
+    name: "Raw Cashew",
     image: "/products/cashew.png",
+    price: "12.99",
+    unit: "kg",
+    description: "Nutritious raw cashews, great for recipes.",
+    href: "/products/raw-cashews",
+  },
+  {
+    name: "Granola",
+    image: "/products/granola.jpeg",
+    price: "12.99",
+    unit: "kg",
+    description: "Nutritious raw cashews, great for recipes.",
+    href: "/products/raw-cashews",
+  },
+  {
+    name: "Moringa Powder",
+    image: "/products/moringa.jpeg",
     price: "12.99",
     unit: "kg",
     description: "Nutritious raw cashews, great for recipes.",
@@ -107,9 +123,9 @@ const trendingProducts = [
   // Add more products as needed
 ];
 
-const featuredProducts = trendingProducts.map((product) => (
+const featuredProducts = trendingProducts.map((product, index) => (
   <ProductCard
-    key={product.name}
+    key={product.name + index}
     name={product.name}
     image={product.image}
     price={product.price}
