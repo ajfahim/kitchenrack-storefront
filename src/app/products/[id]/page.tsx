@@ -1,5 +1,11 @@
+import ProductGallery from "@/components/productDetails/ProductGallery";
+
 const ProductDetails = () => {
-  return <div>product details</div>;
+  return (
+    <div>
+      <ProductGallery />
+    </div>
+  );
 };
 
 export default ProductDetails;
