@@ -11,6 +11,7 @@ import "swiper/css/free-mode";
 import "swiper/css/thumbs";
 import { Autoplay, EffectFade, FreeMode, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper as SwiperType } from "swiper/types";
 
 // Define the props type
 interface ProductGalleryProps {
@@ -18,7 +19,7 @@ interface ProductGalleryProps {
 }
 
 const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
-  const [thumbsSwiper, setThumbsSwiper] = useState<null | Swiper>(null);
+  const [thumbsSwiper, setThumbsSwiper] = useState<null | SwiperType>(null);
 
   return (
     <div className="flex gap-4">
