@@ -1,105 +1,74 @@
-// "use client";
-// import React from "react";
-// import "swiper/css";
-// import "swiper/css/navigation";
-// import "swiper/css/thumbs";
-// import { Navigation, Thumbs } from "swiper/modules";
-// import { Swiper, SwiperSlide } from "swiper/react";
-
-// const ProductGallery: React.FC = () => {
-//   const [thumbsSwiper, setThumbsSwiper] = React.useState<any>(null);
-
-//   const images = [
-//     "/products/almond.png",
-//     "/products/cashew.png",
-//     "/products/walnut.png",
-//   ];
-
-//   return (
-//     <div className="product-gallery">
-//       <Swiper
-//         modules={[Navigation, Thumbs]}
-//         navigation
-//         thumbs={{ swiper: thumbsSwiper }}
-//         className="main-gallery"
-//         spaceBetween={10}
-//         slidesPerView={1}
-//       >
-//         {images.map((src, index) => (
-//           <SwiperSlide key={index}>
-//             <img src={src} alt={`Product Image ${index + 1}`} />
-//           </SwiperSlide>
-//         ))}
-//       </Swiper>
-
-//       <Swiper
-//         modules={[Thumbs]}
-//         onSwiper={setThumbsSwiper}
-//         spaceBetween={10}
-//         slidesPerView={3}
-//         watchSlidesProgress
-//         className="thumb-gallery"
-//       >
-//         {images.map((src, index) => (
-//           <SwiperSlide key={index}>
-//             <img src={src} alt={`Thumbnail ${index + 1}`} />
-//           </SwiperSlide>
-//         ))}
-//       </Swiper>
-//     </div>
-//   );
-// };
-
-// export default ProductGallery;
-
 "use client";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import React, { useState } from "react";
 
-const ProductGallery: React.FC = () => {
-  const [activeImage, setActiveImage] = useState(0);
+import { AspectRatio } from "@radix-ui/react-aspect-ratio";
+import Image from "next/image";
+import { useState } from "react";
 
-  const images = [
-    "/products/almond.png",
-    "/products/cashew.png",
-    "/products/walnut.png",
-  ];
+import "swiper/css";
+import "swiper/css/autoplay";
+import "swiper/css/effect-fade";
+import "swiper/css/free-mode";
+import "swiper/css/thumbs";
+import { Autoplay, EffectFade, FreeMode, Thumbs } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Define the props type
+interface ProductGalleryProps {
+  images: string[]; // Array of image URLs
+}
+
+const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
+  const [thumbsSwiper, setThumbsSwiper] = useState<null | Swiper>(null);
 
   return (
-    <div className="product-gallery">
-      {/* Main Image */}
-      <AspectRatio ratio={1} className="mb-4">
-        <img
-          src={images[activeImage]}
-          alt={`Main Product Image ${activeImage + 1}`}
-          className="rounded-lg object-cover w-full h-full"
-        />
-      </AspectRatio>
-
-      {/* Thumbnails */}
-      <Tabs defaultValue={`thumb-${activeImage}`} className="thumbnails">
-        <TabsList className="flex space-x-4">
-          {images.map((src, index) => (
-            <TabsTrigger
-              key={index}
-              value={`thumb-${index}`}
-              onClick={() => setActiveImage(index)}
-              className={`cursor-pointer p-2 border rounded ${
-                activeImage === index ? "border-primary" : "border-gray-300"
-              }`}
-            >
-              <AspectRatio ratio={1} className="w-16">
-                <img
-                  src={src}
-                  alt={`Thumbnail ${index + 1}`}
-                  className="object-cover w-full h-full rounded"
-                />
-              </AspectRatio>
-            </TabsTrigger>
+    <div className="flex gap-4">
+      {/* Thumbnails Swiper */}
+      <div className="hidden md:block">
+        <Swiper
+          onSwiper={setThumbsSwiper}
+          direction="vertical"
+          slidesPerView={6}
+          freeMode
+          watchSlidesProgress
+          modules={[FreeMode, Thumbs]}
+          className="h-[524px] w-20"
+        >
+          {images.map((image, index) => (
+            <SwiperSlide key={index}>
+              <Image
+                width={300}
+                height={300}
+                src={image}
+                alt={`Thumbnail ${index + 1}`}
+                className="object-cover rounded-md cursor-pointer size-20"
+              />
+            </SwiperSlide>
           ))}
-        </TabsList>
-      </Tabs>
+        </Swiper>
+      </div>
+
+      {/* Main Swiper */}
+      <Swiper
+        thumbs={{ swiper: thumbsSwiper }}
+        modules={[Autoplay, EffectFade, Thumbs]}
+        autoplay={{ delay: 3000 }}
+        effect="fade"
+        className="w-full "
+      >
+        {images.map((image, index) => (
+          <SwiperSlide key={index}>
+            <AspectRatio ratio={1}>
+              <Image
+                width={500}
+                height={500}
+                src={image}
+                alt={`Main Slide ${index + 1}`}
+                className="object-cover rounded-md w-full h-auto"
+              />
+            </AspectRatio>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 };
