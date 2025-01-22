@@ -10,7 +10,7 @@ const Footer = () => {
   const year = date.getFullYear();
   const siteInfo = {
     name: "Kitchen Rack",
-    nameBn: "কিচন র্যাক",
+    nameBn: "কিচেন র‍্যাক",
     domain: "https://kitchenrackbd.com",
     address: "House: 8/10, Road: 15, Sector: 10, Uttara, Dhaka",
     phone: "+8801521216404",
