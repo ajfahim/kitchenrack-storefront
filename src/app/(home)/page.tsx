@@ -38,7 +38,7 @@ const categories = [
   },
 ];
 
-const trendingProducts = [
+export const trendingProducts = [
   {
     name: "Organic Almognds",
     image: "/products/almond.png",

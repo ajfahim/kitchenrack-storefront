@@ -24,7 +24,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images }) => {
   return (
     <div className="flex gap-4">
       {/* Thumbnails Swiper */}
-      <div className="hidden md:block">
+      <div className="hidden lg:block">
         <Swiper
           onSwiper={setThumbsSwiper}
           direction="vertical"

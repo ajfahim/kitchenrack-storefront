@@ -35,7 +35,7 @@ export default function RootLayout({
       >
         <TailwindIndicator /> {/* for development only */}
         <Navbar />
-        <main className="container mx-auto px-1 md:px-3 lg:px-4 ">
+        <main className="container max-w-screen-2xl mx-auto px-1 md:px-3 lg:px-4">
           {children}
         </main>
         <Footer />
