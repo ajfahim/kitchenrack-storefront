@@ -39,7 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <span className="text-accent">{price}</span>{" "}
           <span className="text-muted">{unit}</span>
         </p>
-        <Button>Add to Cart</Button>
+        <Button className="w-full">Add to Cart</Button>
       </div>
     </Link>
   );

@@ -1,11 +1,11 @@
 "use client";
+import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const BreadCrumb = () => {
   const pathname = usePathname();
-  console.log("🚀 ~ BreadCrumb ~ pathname:", pathname);
   return (
     <div className="py-10">
       <nav className="flex" aria-label="Breadcrumb">
@@ -24,19 +24,29 @@ const BreadCrumb = () => {
           <li>
             <Link
               href="/products"
-              className="font-bold text-gray-500 hover:text-accent text-lg"
+              className={cn(
+                "font-bold text-gray-500 hover:text-accent text-lg",
+                pathname === "/products" && "text-accent"
+              )}
             >
               Products
             </Link>
           </li>
-          <li>
-            <ChevronRight className="text-gray-500" />
-          </li>
-          <li>
-            <span className="text-accent font-bold text-lg" aria-current="page">
-              {pathname.split("/").pop()}
-            </span>
-          </li>
+          {pathname !== "/products" && (
+            <>
+              <li>
+                <ChevronRight className="text-gray-500" />
+              </li>
+              <li>
+                <span
+                  className="text-accent font-bold text-lg"
+                  aria-current="page"
+                >
+                  {pathname.split("/").pop()}
+                </span>
+              </li>
+            </>
+          )}
         </ol>
       </nav>
     </div>

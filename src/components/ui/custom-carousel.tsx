@@ -27,7 +27,6 @@ export function CustomCarousel({
   showArrows = false,
   type = "banner",
 }: CustomCarouselProps) {
-  console.log("🚀 ~ items:", items);
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
 

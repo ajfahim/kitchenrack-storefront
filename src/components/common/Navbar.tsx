@@ -26,12 +26,12 @@ const Navbar = () => {
 
   return (
     <nav className="border-b border-b-gray-200 py-2 bg-slate-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4 xl:px-0">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex-shrink-0">
+          <Link href="/" className="flex-shrink-0">
             <Image src="/logo.png" alt="Logo" width={100} height={100} />
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
