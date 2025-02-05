@@ -1,5 +1,5 @@
-import type { Config } from "tailwindcss";
 import forms from "@tailwindcss/forms";
+import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
@@ -20,7 +20,7 @@ export default {
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
-          dark: "hsl(var(--primary-dark))",
+          hover: "hsl(var(--primary-hover))",
           foreground: "hsl(var(--primary-foreground))",
         },
         accent: {

@@ -4,6 +4,7 @@ import Navbar from "@/components/common/Navbar";
 import { TailwindIndicator } from "@/components/common/TailwindIndicator";
 import type { Metadata } from "next";
 import { Inter, Urbanist } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -39,6 +40,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <Toaster position="top-center" />
       </body>
     </html>
   );
