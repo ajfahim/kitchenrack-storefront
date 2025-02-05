@@ -5,63 +5,60 @@
 @layer base {
   :root {
     /* Base colors */
-    --background: 0 0% 100%;
-    --foreground: 43 31% 17%; /* #38311F */
-    
+    --background: 0 0% 100%; /* #FFFFFF */
+    --foreground: 43 31% 17%; /* #38311F - Main text */
+
     /* Brand Colors */
-    --primary: 47 98% 51%; /* #FCCC0A */
-    --primary-dark: 44 100% 50%; /* #FFB800 */
+    --primary: 47 98% 51%; /* #FCCC0A - Primary yellow */
+    --primary-hover: 44 100% 50%; /* #FFB800 - Hover state */
     --primary-foreground: 43 31% 17%; /* #38311F */
-    
+
     /* Accent Colors */
-    --accent: 357 84% 48%; /* #D12027 */
-    --accent-foreground: 0 0% 100%;
-    
+    --accent: 357 84% 48%; /* #D12027 - Price red */
+    --accent-foreground: 0 0% 95%; /* #F1F1F1 */
+
     /* Neutral Colors */
-    --neutral: 33 6% 48%; /* #837F74 */
-    
+    --muted: 33 6% 48%; /* #837F74 - Secondary text */
+    --muted-foreground: 33 6% 48%; /* #837F74 */
+
     /* UI Colors */
-    --card: 0 0% 95%; /* #F1F1F1 */
-    --card-foreground: 43 31% 17%;
-    
-    --popover: 0 0% 100%;
-    --popover-foreground: 43 31% 17%;
-    
-    --muted: 33 6% 48%; /* Using neutral gray for muted */
-    --muted-foreground: 33 6% 48%; /* Using neutral gray for muted text */
-    
-    --border: 33 6% 48%; /* Using neutral gray for borders */
+    --card: 0 0% 100%; /* #FFFFFF */
+    --card-foreground: 43 31% 17%; /* #38311F */
+
+    --popover: 0 0% 100%; /* #FFFFFF */
+    --popover-foreground: 43 31% 17%; /* #38311F */
+
+    /* Input and Border Colors */
+    --border: 33 6% 48%; /* #837F74 */
     --input: 33 6% 48%;
-    --ring: 47 98% 51%;
-    
+    --ring: 47 98% 51%; /* #FCCC0A */
+
     --radius: 0.5rem;
   }
- 
+
   .dark {
-    --background: 43 31% 17%;
-    --foreground: 0 0% 95%;
-    
-    --primary: 47 98% 51%;
-    --primary-dark: 44 100% 50%;
-    --primary-foreground: 43 31% 17%;
-    
-    --accent: 357 84% 48%;
-    --accent-foreground: 0 0% 100%;
-    
-    --neutral: 33 6% 48%;
-    
-    --card: 43 31% 20%;
-    --card-foreground: 0 0% 95%;
-    
+    --background: 43 31% 17%; /* #38311F */
+    --foreground: 0 0% 95%; /* #F1F1F1 */
+
+    --primary: 47 98% 51%; /* #FCCC0A */
+    --primary-hover: 44 100% 50%; /* #FFB800 */
+    --primary-foreground: 43 31% 17%; /* #38311F */
+
+    --accent: 357 84% 48%; /* #D12027 */
+    --accent-foreground: 0 0% 95%; /* #F1F1F1 */
+
+    --muted: 33 6% 48%; /* #837F74 */
+    --muted-foreground: 33 6% 48%;
+
+    --card: 43 31% 17%; /* #38311F */
+    --card-foreground: 0 0% 95%; /* #F1F1F1 */
+
     --popover: 43 31% 17%;
     --popover-foreground: 0 0% 95%;
-    
-    --muted: 33 6% 48%;
-    --muted-foreground: 33 6% 65%;
-    
+
     --border: 33 6% 48%;
     --input: 33 6% 48%;
-    --ring: 47 98% 51%;
+    --ring: 47 98% 51%; /* #FCCC0A */
   }
 }
 

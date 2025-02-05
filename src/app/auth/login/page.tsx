@@ -1,4 +1,7 @@
-import { Button } from "@/components/ui/button";
+"use client";
+
+import { OtpVerificationForm } from "@/components/auth/otp-verification-form";
+import { PhoneVerificationForm } from "@/components/auth/phone-verification-form";
 import {
   Card,
   CardContent,
@@ -6,53 +9,41 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import OTPInputComponent from "@/components/ui/otp-input";
-import { PhoneInput } from "@/components/ui/phone-input";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
-export default function LoginForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+export default function LoginPage() {
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className={cn("flex flex-col gap-6", className)} {...props}>
-        <Card>
+      <div className={cn("w-full max-w-[400px]")}>
+        <Card className="shadow-lg">
           <CardHeader>
             <CardTitle className="text-2xl">Login</CardTitle>
             <CardDescription>
-              Enter your phone number below to login to your account
+              {isOtpSent
+                ? "Enter the OTP sent to your phone"
+                : "Enter your phone number below to login to your account"}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form>
-              <div className="flex flex-col gap-6">
-                <div className="grid gap-2">
-                  <Label htmlFor="phone">Phone</Label>
-                  <PhoneInput
-                    // value={phoneNumber}
-                    // onChange={setPhoneNumber}
-                    international
-                    defaultCountry="BD"
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="otp">OTP</Label>
-                  <OTPInputComponent />
-                </div>
-
-                <Button type="submit" className="w-full">
-                  Login
-                </Button>
-              </div>
-              <div className="mt-4 text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <a href="#" className="underline underline-offset-4">
-                  Sign up
-                </a>
-              </div>
-            </form>
+            {isOtpSent ? (
+              <OtpVerificationForm
+                phoneNumber={phoneNumber}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+              />
+            ) : (
+              <PhoneVerificationForm
+                setPhoneNumber={setPhoneNumber}
+                setIsOtpSent={setIsOtpSent}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+              />
+            )}
           </CardContent>
         </Card>
       </div>

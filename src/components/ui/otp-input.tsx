@@ -1,19 +1,26 @@
 "use client";
-
-import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { OTPInput, SlotProps } from "input-otp";
 import { useId } from "react";
 
-export default function OTPInputComponent() {
+interface OTPInputComponentProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+export default function OTPInputComponent({
+  value,
+  onChange,
+}: OTPInputComponentProps) {
   const id = useId();
   return (
-    <div className="space-y-2">
-      <Label htmlFor={id}>OTP input (spaced)</Label>
+    <div>
       <OTPInput
         id={id}
+        value={value}
+        onChange={onChange}
         containerClassName="flex items-center gap-3 has-[:disabled]:opacity-50"
-        maxLength={4}
+        maxLength={6}
         render={({ slots }) => (
           <div className="flex gap-2">
             {slots.map((slot, idx) => (
