@@ -1,7 +1,8 @@
 "use client";
 
 import { OtpVerificationForm } from "@/components/auth/otp-verification-form";
-import { PhoneVerificationForm } from "@/components/auth/phone-verification-form";
+import { SignupForm } from "@/components/auth/signup-form";
+
 import {
   Card,
   CardContent,
@@ -13,7 +14,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,11 +24,11 @@ export default function LoginPage() {
       <div className={cn("w-full max-w-[400px]")}>
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="text-2xl">Login</CardTitle>
+            <CardTitle className="text-2xl">Sign Up</CardTitle>
             <CardDescription>
               {isOtpSent
                 ? "Enter the OTP sent to your phone"
-                : "Enter your phone number below to login to your account"}
+                : "Fill in your details below to create an account"}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -38,7 +39,7 @@ export default function LoginPage() {
                 setIsLoading={setIsLoading}
               />
             ) : (
-              <PhoneVerificationForm
+              <SignupForm
                 setPhoneNumber={setPhoneNumber}
                 setIsOtpSent={setIsOtpSent}
                 isLoading={isLoading}
@@ -46,9 +47,9 @@ export default function LoginPage() {
               />
             )}
             <div className="text-center text-sm mt-4">
-              Don&apos;t have an account?
-              <Link href="/auth/sign-up" className="underline">
-                Sign up
+              Already have an account?{" "}
+              <Link href="/auth/login" className="underline">
+                Login
               </Link>
             </div>
           </CardContent>
