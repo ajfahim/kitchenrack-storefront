@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function LoginPage() {
@@ -44,6 +45,12 @@ export default function LoginPage() {
                 setIsLoading={setIsLoading}
               />
             )}
+            <div className="text-center text-sm mt-4">
+              Don&apos;t have an account?{" "}
+              <Link href="/auth/signup" className="underline">
+                Sign up
+              </Link>
+            </div>
           </CardContent>
         </Card>
       </div>
