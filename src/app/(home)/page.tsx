@@ -4,6 +4,7 @@ import HomeBanner from "@/components/home/HomeBanner";
 import HomePageCategorySlider from "@/components/home/HomePageCategorySlider";
 import { HomePageSection } from "@/components/home/HomePageSection";
 import { CustomCarousel } from "@/components/ui/custom-carousel";
+import { cookies } from "next/headers";
 
 const categories = [
   {
@@ -134,7 +135,14 @@ const featuredProducts = trendingProducts.map((product, index) => (
   />
 ));
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies();
+  const cookie = cookieStore.get("refresh_token"); // Check for refresh_token specifically
+  console.log("🚀 ~ Home ~ cookies:", {
+    refresh_token: cookie?.value,
+    all_cookies: cookieStore.getAll().map(c => c.name)
+  });
+
   return (
     <div className="my-4 space-y-24">
       {/* hero banner  */}

@@ -4,6 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { TApiResponse } from "@/types/api";
+import { TUserResponse } from "@/constants/types";
+import { axiosInstance } from "@/lib/axios";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -12,16 +16,56 @@ interface SignupFormProps {
   setIsOtpSent: (status: boolean) => void;
   isLoading: boolean;
   setIsLoading: (status: boolean) => void;
+  setUser: (user: TUserResponse | null) => void;
 }
+
+type TSignUpData = {
+  id: string;
+  full_name: string;
+  role: "admin" | "user";
+  phone: string;
+};
 
 export function SignupForm({
   setPhoneNumber,
   setIsOtpSent,
   isLoading,
   setIsLoading,
+  setUser,
 }: SignupFormProps) {
   const [phone, setPhone] = useState("");
   const [fullName, setFullName] = useState("");
+
+  const { mutateAsync: signUp, isPending } = useMutation({
+    mutationFn: async ({
+      phone,
+      full_name,
+    }: {
+      phone: string;
+      full_name: string;
+    }) => {
+      const { data } = await axiosInstance.post<TApiResponse<TSignUpData>>("/auth/signup", {
+        phone,
+        full_name,
+      });
+      console.log("🚀 ~ mutationFn: ~ data:", data);
+      return data;
+    },
+    onSuccess: (response) => {
+      if (response.success) {
+        setUser(response.data);
+        setPhoneNumber(phone);
+        setIsOtpSent(true);
+        toast.success(response.message);
+      } else {
+        toast.error(response.message);
+      }
+    },
+    onError: (error) => {
+      console.error("SignUp Error:", error);
+      toast.error("Failed to send OTP. Please try again.");
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,20 +82,10 @@ export function SignupForm({
 
     try {
       setIsLoading(true);
-
-      // Emulate API call with a delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Emulate success scenario
-      setPhoneNumber(phone);
-      setIsOtpSent(true);
-      toast.success("OTP sent to your phone number");
-
-      // For testing, log the OTP (in real app, this would come from backend)
-      console.log("Test OTP: 123456");
-    } catch (error) {
-      console.log("🚀 ~ handleSubmit ~ error:", error);
-      toast.error("Failed to send OTP. Please try again.");
+      await signUp({
+        full_name: fullName,
+        phone,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -79,8 +113,12 @@ export function SignupForm({
           />
         </div>
       </div>
-      <Button type="submit" className="w-full mt-6" disabled={isLoading}>
-        {isLoading ? "Sending..." : "Send OTP"}
+      <Button
+        type="submit"
+        className="w-full mt-6"
+        disabled={isPending || isLoading}
+      >
+        {isPending || isLoading ? "Sending..." : "Send OTP"}
       </Button>
     </form>
   );

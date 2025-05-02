@@ -9,7 +9,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { OtpType } from "@/constants/enums";
 import { cn } from "@/lib/utils";
+import { TUserResponse } from "@/types";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -17,6 +19,8 @@ export default function LoginPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<TUserResponse | null>(null);
+  console.log("🚀 ~ LoginPage ~ user:", user);
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
@@ -36,6 +40,8 @@ export default function LoginPage() {
                 phoneNumber={phoneNumber}
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
+                user={user}
+                type={OtpType.LOGIN}
               />
             ) : (
               <PhoneVerificationForm
@@ -43,9 +49,18 @@ export default function LoginPage() {
                 setIsOtpSent={setIsOtpSent}
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
+                setUser={setUser}
               />
             )}
-            <div className="text-center text-sm mt-4">
+
+            <div
+              className="text-center text-sm mt-2 cursor-pointer text-accent/60 underline"
+              onClick={() => setIsOtpSent(!isOtpSent)}
+            >
+              {isOtpSent ? "I don't have a code" : "I already have a code"}
+            </div>
+
+            <div className="text-center text-base mt-4">
               Don&apos;t have an account?
               <Link href="/auth/sign-up" className="underline">
                 Sign up
