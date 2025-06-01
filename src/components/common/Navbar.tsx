@@ -1,17 +1,42 @@
 "use client";
 
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Search, ShoppingBag, User, X } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { useAuthStore } from "@/store/auth-store";
+import {
+  LogOut,
+  Menu,
+  Search,
+  ShoppingBag,
+  User,
+  UserCircle2,
+  X,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { logout } = useAuth();
   // This would typically come from your cart state management
   const cartTotal = 2499.99; // Example amount
+
+  const { user, isAuthenticated } = useAuthStore();
+  console.log("🚀 ~ Navbar ~ user:", user);
+
+  console.log("🚀 ~ Navbar ~ isAuthenticated:", isAuthenticated);
 
   const navItems = [
     // { name: "Home", href: "/" },
@@ -69,9 +94,49 @@ const Navbar = () => {
                 0
               </span>
             </Link>
-            <Link href="/auth/login">
-              <User className="h-6 w-6" />
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Avatar className="cursor-pointer">
+                  <AvatarFallback className="bg-primary text-primary-foreground">
+                    <UserCircle2 className="h-6 w-6" />
+                  </AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {isAuthenticated ? (
+                  <>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/profile"
+                        className="w-full cursor-pointer flex items-center"
+                      >
+                        <UserCircle2 className="mr-2 h-4 w-4" />
+                        <span>Profile</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={logout}
+                      className="text-destructive cursor-pointer"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Log out</span>
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/auth/login"
+                      className="w-full cursor-pointer flex items-center"
+                    >
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Login</span>
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Mobile menu button */}
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>

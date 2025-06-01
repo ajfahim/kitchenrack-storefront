@@ -4,43 +4,11 @@ import HomeBanner from "@/components/home/HomeBanner";
 import HomePageCategorySlider from "@/components/home/HomePageCategorySlider";
 import { HomePageSection } from "@/components/home/HomePageSection";
 import { CustomCarousel } from "@/components/ui/custom-carousel";
-
-const categories = [
-  {
-    name: "Raw Nuts",
-    icon: "/categoryIcons/categoryIcon1.png",
-    href: "/category/raw-nuts",
-  },
-  {
-    name: "Roasted Nuts",
-    icon: "/categoryIcons/categoryIcon2.png",
-    href: "/category/roasted-nuts",
-  },
-  {
-    name: "Raw Seed",
-    icon: "/categoryIcons/categoryIcon3.png",
-    href: "/category/raw-seed",
-  },
-  {
-    name: "Roasted Seed",
-    icon: "/categoryIcons/categoryIcon4.png",
-    href: "/category/roasted-seed",
-  },
-  {
-    name: "Mixed Packages",
-    icon: "/categoryIcons/categoryIcon5.png",
-    href: "/category/mixed-packages",
-  },
-  {
-    name: "Dates",
-    icon: "/categoryIcons/categoryIcon1.png",
-    href: "/category/dates",
-  },
-];
+import { Product } from "@/types";
 
 export const trendingProducts = [
   {
-    name: "Organic Almognds",
+    name: "Organic Almonads Organic Almonads Organic Almonads",
     image: "/products/almond.png",
     price: "15.99",
     unit: "kg",
@@ -48,7 +16,7 @@ export const trendingProducts = [
     href: "/products/organic-almonds",
   },
   {
-    name: "Raw Cashews",
+    name: "Raw Cassshews",
     image: "/products/cashew.png",
     price: "12.99",
     unit: "kg",
@@ -64,7 +32,7 @@ export const trendingProducts = [
     href: "/products/dried-cranberries",
   },
   {
-    name: "Dried Cranberries Dried Cranberries Dried Cranberries",
+    name: "Dried Cranberries",
     image: "/products/Roasted Pistachio.png",
     price: "8.99",
     unit: "kg",
@@ -73,7 +41,7 @@ export const trendingProducts = [
   },
 
   {
-    name: "Raw Cashewss",
+    name: "Raw Cashews",
     image: "/products/cashew.png",
     price: "12.99",
     unit: "kg",
@@ -89,7 +57,7 @@ export const trendingProducts = [
     href: "/products/dried-cranberries",
   },
   {
-    name: "Organics Almonds",
+    name: "Organic Almonds",
     image: "/products/almond.png",
     price: "15.99",
     unit: "kg",
@@ -123,18 +91,31 @@ export const trendingProducts = [
   // Add more products as needed
 ];
 
-const featuredProducts = trendingProducts.map((product, index) => (
-  <ProductCard
-    key={product.name + index}
-    name={product.name}
-    image={product.image}
-    price={product.price}
-    unit={product.unit}
-    href={product.href}
-  />
-));
+export default async function Home() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_Backend_URL}/api/v1/products?featured=true`,
+    {
+      next: {
+        revalidate: 3600, // 1 hour
+      },
+    }
+  );
+  const featuredProducts = await res.json();
+  console.log("products", featuredProducts);
 
-export default function Home() {
+  const featuredProductsCards = featuredProducts.data.map(
+    (product: Product, index: number) => (
+      <ProductCard
+        key={product.id}
+        name={product.name}
+        image={product.images[0].url}
+        price={product.price}
+        unit={product.unit}
+        href={`/products/${product.slug}`}
+      />
+    )
+  );
+
   return (
     <div className="my-4 space-y-24">
       {/* hero banner  */}
@@ -146,7 +127,7 @@ export default function Home() {
         link="/categories"
       >
         <div className="w-full">
-          <HomePageCategorySlider categories={categories} />
+          <HomePageCategorySlider />
         </div>
       </HomePageSection>
       {/* trending products section  */}
@@ -161,7 +142,7 @@ export default function Home() {
               key={product.name}
               name={product.name}
               image={product.image}
-              price={product.price}
+              price={+product.price}
               unit={product.unit}
               href={product.href}
             />
@@ -179,7 +160,7 @@ export default function Home() {
       >
         <CustomCarousel
           showArrows
-          items={featuredProducts}
+          items={featuredProductsCards}
           showDots={false}
           type="product"
         />
