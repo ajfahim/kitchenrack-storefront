@@ -29,7 +29,7 @@ export function CustomCarousel({
 }: CustomCarouselProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
-
+console.log("items",items);
   useEffect(() => {
     if (!api) {
       return;
@@ -40,17 +40,7 @@ export function CustomCarousel({
     });
   }, [api]);
 
-  // useEffect(() => {
-  //   if (!api || !autoplay || isPaused) {
-  //     return;
-  //   }
 
-  //   const autoplayInterval = setInterval(() => {
-  //     api.scrollNext();
-  //   }, interval);
-
-  //   return () => clearInterval(autoplayInterval);
-  // }, [api, autoplay, interval, isPaused]);
 
   return (
     <div className="relative group">

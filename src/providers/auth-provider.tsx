@@ -13,7 +13,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Skip auth check for auth-related pages
-    if (!pathname?.includes('/auth/') && !hasCheckedAuth.current) {
+    if (!pathname?.includes("/auth/") && !hasCheckedAuth.current) {
       hasCheckedAuth.current = true;
       checkAuth();
     }

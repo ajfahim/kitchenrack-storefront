@@ -41,7 +41,7 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
-// Add response interceptor to handle 401 errors
+// Add response interceptor to handle errors
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError<AuthErrorResponse>) => {
@@ -54,74 +54,15 @@ axiosInstance.interceptors.response.use(
       response: error.response?.data,
     });
 
-    const isRefreshEndpoint = originalRequest?.url?.includes("/auth/refresh-token");
-    const isAuthError = error.response?.status === 401 || error.response?.status === 404;
+    // For now, just pass through all errors without authentication handling
+    // Authentication logic will be implemented later for profile pages
+    
+    // Note for future implementation:
+    // 1. Check if the error is an auth error (401/404)
+    // 2. Check if the request is for a protected route (e.g., /profile/)
+    // 3. Try to refresh the token if needed
+    // 4. Redirect to login only for protected routes if refresh fails
 
-    // Only retry once and only for auth errors that aren't from the refresh endpoint
-    if (isAuthError && !originalRequest._retry && !isRefreshEndpoint) {
-      console.log("🔄 Attempting token refresh...", {
-        originalUrl: originalRequest.url,
-        status: error.response?.status,
-        isRefresh: isRefreshEndpoint,
-        hasRetried: originalRequest._retry,
-      });
-
-      originalRequest._retry = true;
-      try {
-        console.log("📡 Making refresh token request with cookies present:", {
-          cookies: document.cookie,
-          config: {
-            withCredentials: true,
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          },
-        });
-
-        const response = await axiosInstance.get<RefreshTokenResponse>("/auth/refresh-token", {
-          withCredentials: true,
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
-
-        console.log("📥 Refresh token response:", {
-          status: response.status,
-          data: response.data,
-        });
-
-        if (response.data.success) {
-          console.log("✅ Token refreshed successfully, retrying original request");
-          return axiosInstance({
-            ...originalRequest,
-            withCredentials: true, // Ensure cookies are sent with retry
-          });
-        } else {
-          console.log("❌ Refresh token request failed:", response.data);
-          throw new Error("Token refresh failed");
-        }
-      } catch (refreshError: unknown) {
-        const axiosError = refreshError as AxiosError<AuthErrorResponse>;
-        console.error("❌ Token refresh failed:", {
-          message: axiosError.message,
-          response: axiosError.response?.data,
-          status: axiosError.response?.status,
-        });
-
-        // Only redirect to login for auth-related errors
-        if (
-          (axiosError.response?.status === 403 || axiosError.response?.status === 401) &&
-          typeof window !== "undefined" &&
-          !window.location.pathname.includes("/auth/")
-        ) {
-          console.log("🔄 Redirecting to login page due to invalid token");
-          window.location.href = "/auth/login";
-        }
-        throw refreshError;
-      }
-    }
     return Promise.reject(error);
   }
 );
