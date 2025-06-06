@@ -2,37 +2,44 @@ import { ArrowRight, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { calculateDiscountPercentage, formatPrice } from "@/lib/utils";
 
 interface ProductCardProps {
   name: string;
   image: string;
   price: number;
-  unit: string;
+  sale_price?: number | null;
   href: string;
+  unit?: string;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
   name,
   image,
   price,
+  sale_price = null,
   unit,
   href,
 }) => {
-  // Calculate discount price (just for display - in a real app this would come from data)
-  const originalPrice = price;
-  const discountPercentage = 10; // Example: 10% off
-  const discountPrice = (
-    (originalPrice * (100 - discountPercentage)) /
-    100
-  ).toFixed(2);
+  // Calculate discount percentage based on original price and sale price
+  const discountPercentage = calculateDiscountPercentage(price, sale_price);
+  
+  // Use the sale price if available, otherwise use the original price
+  const displayPrice = sale_price && sale_price < price ? sale_price : price;
+  
+  // Format prices for display
+  const formattedOriginalPrice = formatPrice(price);
+  const formattedDisplayPrice = formatPrice(displayPrice);
 
   return (
-    <div className="group max-w-[330px] overflow-hidden transition-all duration-300 rounded-lg bg-white shadow-sm hover:shadow-lg border border-gray-100">
-      {/* Badge for discount */}
+    <div className="group max-w-[330px] overflow-hidden transition-all duration-300 rounded-lg bg-white shadow-sm hover:shadow-lg border border-gray-200">
+      {/* Badge for discount - only show if there's an actual discount */}
       <div className="relative">
-        <div className="absolute top-2 right-2 bg-accent text-white text-xs font-bold px-2 py-1 rounded z-10">
-          {discountPercentage}% OFF
-        </div>
+        {discountPercentage > 0 && (
+          <div className="absolute top-2 right-2 bg-accent text-white text-xs font-bold px-2 py-1 rounded z-10">
+            {discountPercentage}% OFF
+          </div>
+        )}
 
         {/* Product image with link */}
         <Link
@@ -60,10 +67,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Price Section */}
         <div className="flex items-center gap-2 mt-2 mb-4">
-          <span className="text-accent font-bold text-xl">
-            ৳{discountPrice}
-          </span>
-          <span className="text-gray-400 text-lg line-through">৳{price}</span>
+          <div className="flex items-baseline">
+            <span className="text-accent font-bold text-xl">
+              ৳{formattedDisplayPrice}
+            </span>
+            {unit && <span className="text-gray-500 ml-1 text-sm">/{unit}</span>}
+          </div>
+          {/* Only show original price if there's a discount */}
+          {discountPercentage > 0 && (
+            <div className="flex items-baseline">
+              <span className="text-gray-400 text-lg line-through">৳{formattedOriginalPrice}</span>
+              {unit && <span className="text-gray-400 ml-1 text-xs line-through">/{unit}</span>}
+            </div>
+          )}
         </div>
 
         {/* Action buttons */}

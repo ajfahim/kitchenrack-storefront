@@ -20,7 +20,6 @@ export default function LoginPage() {
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<TUserResponse | null>(null);
-  console.log("🚀 ~ LoginPage ~ user:", user);
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">

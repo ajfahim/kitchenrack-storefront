@@ -11,6 +11,7 @@ export const trendingProducts = [
     name: "Organic Almonads Organic Almonads Organic Almonads",
     image: "/products/almond.png",
     price: "15.99",
+    sale_price: "13.99",
     unit: "kg",
     description: "Delicious organic almonds, perfect for snacking.",
     href: "/products/organic-almonds",
@@ -19,6 +20,7 @@ export const trendingProducts = [
     name: "Raw Cassshews",
     image: "/products/cashew.png",
     price: "12.99",
+    sale_price: "10.79",
     unit: "kg",
     description: "Nutritious raw cashews, great for recipes.",
     href: "/products/raw-cashews",
@@ -101,7 +103,6 @@ export default async function Home() {
     }
   );
   const featuredProducts = await res.json();
-  console.log("products", featuredProducts);
 
   const featuredProductsCards = featuredProducts.data.map(
     (product: Product, index: number) => (
@@ -110,6 +111,7 @@ export default async function Home() {
         name={product.name}
         image={product.images[0].url}
         price={product.price}
+        sale_price={product.sale_price}
         unit={product.unit}
         href={`/products/${product.slug}`}
       />
@@ -143,6 +145,7 @@ export default async function Home() {
               name={product.name}
               image={product.image}
               price={+product.price}
+              sale_price={product.sale_price ? +product.sale_price : null}
               unit={product.unit}
               href={product.href}
             />

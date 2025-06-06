@@ -9,8 +9,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { OtpType, TUserResponse } from "@/constants/types";
+import { OtpType } from "@/constants/enums";
 import { cn } from "@/lib/utils";
+import { TUserResponse } from "@/types";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -19,7 +20,6 @@ export default function SignupPage() {
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<TUserResponse | null>(null);
-  console.log("🚀 ~ SignupPage ~ user:", user);
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
