@@ -7,28 +7,27 @@ import { calculateDiscountPercentage, formatPrice } from "@/lib/utils";
 interface ProductCardProps {
   name: string;
   image: string;
-  price: number;
-  sale_price?: number | null;
+  display_price: number;
+  display_sale_price?: number | undefined | null;
   href: string;
-  unit?: string;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
   name,
-  image,
-  price,
-  sale_price = null,
-  unit,
-  href,
+    image,
+    display_price,
+    display_sale_price,
+    href,
 }) => {
   // Calculate discount percentage based on original price and sale price
-  const discountPercentage = calculateDiscountPercentage(price, sale_price);
+  const discountPercentage = calculateDiscountPercentage(display_price, display_sale_price);
+  console.log({discountPercentage});
   
   // Use the sale price if available, otherwise use the original price
-  const displayPrice = sale_price && sale_price < price ? sale_price : price;
+  const displayPrice = display_sale_price && display_sale_price < display_price ? display_sale_price : display_price;
   
   // Format prices for display
-  const formattedOriginalPrice = formatPrice(price);
+  const formattedOriginalPrice = formatPrice(display_price);
   const formattedDisplayPrice = formatPrice(displayPrice);
 
   return (
@@ -71,13 +70,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <span className="text-accent font-bold text-xl">
               ৳{formattedDisplayPrice}
             </span>
-            {unit && <span className="text-gray-500 ml-1 text-sm">/{unit}</span>}
           </div>
           {/* Only show original price if there's a discount */}
-          {discountPercentage > 0 && (
+          {display_sale_price && display_sale_price > 0 && (
             <div className="flex items-baseline">
               <span className="text-gray-400 text-lg line-through">৳{formattedOriginalPrice}</span>
-              {unit && <span className="text-gray-400 ml-1 text-xs line-through">/{unit}</span>}
             </div>
           )}
         </div>

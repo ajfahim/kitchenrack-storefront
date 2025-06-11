@@ -1,27 +1,18 @@
-import ProductCard from "@/components/common/ProductCard";
-import BreadCrumb from "@/components/productDetails/BreadCrumb";
-import { ProductFilter } from "@/components/Products/productFilter";
-import { trendingProducts } from "../(home)/page";
+import ProductPageClientShell from "@/components/Products/ProductPageClientShell";
+import { Product } from "@/types";
 
-const Products = () => {
-  return (
-    <div>
-      <BreadCrumb />
-      <ProductFilter />
-      <div className="my-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
-        {trendingProducts.map((product) => (
-          <ProductCard
-            key={product.name}
-            name={product.name}
-            image={product.image}
-            price={product.price}
-            unit={product.unit}
-            href={product.href}
-          />
-        ))}
-      </div>
-    </div>
+export default async function Products() {
+  // fetch products 
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_Backend_URL}/api/v1/products`,
+    {
+      next: {
+        revalidate: 3600, // 1 hour
+      },
+    }
   );
-};
+  const products = await res.json();
 
-export default Products;
+  return <ProductPageClientShell products={products.data as Product[]} />;
+}
+

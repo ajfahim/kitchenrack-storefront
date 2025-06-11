@@ -6,92 +6,7 @@ import { HomePageSection } from "@/components/home/HomePageSection";
 import { CustomCarousel } from "@/components/ui/custom-carousel";
 import { Product } from "@/types";
 
-export const trendingProducts = [
-  {
-    name: "Organic Almonads Organic Almonads Organic Almonads",
-    image: "/products/almond.png",
-    price: "15.99",
-    sale_price: "13.99",
-    unit: "kg",
-    description: "Delicious organic almonds, perfect for snacking.",
-    href: "/products/organic-almonds",
-  },
-  {
-    name: "Raw Cassshews",
-    image: "/products/cashew.png",
-    price: "12.99",
-    sale_price: "10.79",
-    unit: "kg",
-    description: "Nutritious raw cashews, great for recipes.",
-    href: "/products/raw-cashews",
-  },
-  {
-    name: "Dried Cranaberries",
-    image: "/products/walnut.png",
-    price: "8.99",
-    unit: "kg",
-    description: "Sweet and tart dried cranberries for a healthy snack.",
-    href: "/products/dried-cranberries",
-  },
-  {
-    name: "Dried Cranberries",
-    image: "/products/Roasted Pistachio.png",
-    price: "8.99",
-    unit: "kg",
-    description: "Sweet and tart dried cranberries for a healthy snack.",
-    href: "/products/dried-cranberries",
-  },
 
-  {
-    name: "Raw Cashews",
-    image: "/products/cashew.png",
-    price: "12.99",
-    unit: "kg",
-    description: "Nutritious raw cashews, great for recipes.",
-    href: "/products/raw-cashews",
-  },
-  {
-    name: "Dried Cranbersries",
-    image: "/products/walnut.png",
-    price: "8.99",
-    unit: "kg",
-    description: "Sweet and tart dried cranberries for a healthy snack.",
-    href: "/products/dried-cranberries",
-  },
-  {
-    name: "Organic Almonds",
-    image: "/products/almond.png",
-    price: "15.99",
-    unit: "kg",
-    description: "Delicious organic almonds, perfect for snacking.",
-    href: "/products/organic-almonds",
-  },
-  {
-    name: "Raw Cashew",
-    image: "/products/cashew.png",
-    price: "12.99",
-    unit: "kg",
-    description: "Nutritious raw cashews, great for recipes.",
-    href: "/products/raw-cashews",
-  },
-  {
-    name: "Granola",
-    image: "/products/granola.jpeg",
-    price: "12.99",
-    unit: "kg",
-    description: "Nutritious raw cashews, great for recipes.",
-    href: "/products/raw-cashews",
-  },
-  {
-    name: "Moringa Powder",
-    image: "/products/moringa.jpeg",
-    price: "12.99",
-    unit: "kg",
-    description: "Nutritious raw cashews, great for recipes.",
-    href: "/products/raw-cashews",
-  },
-  // Add more products as needed
-];
 
 export default async function Home() {
   const res = await fetch(
@@ -103,6 +18,7 @@ export default async function Home() {
     }
   );
   const featuredProducts = await res.json();
+  console.log(featuredProducts);
 
   const featuredProductsCards = featuredProducts.data.map(
     (product: Product, index: number) => (
@@ -110,9 +26,21 @@ export default async function Home() {
         key={product.id}
         name={product.name}
         image={product.images[0].url}
-        price={product.price}
-        sale_price={product.sale_price}
-        unit={product.unit}
+        display_price={product.display_price}
+        display_sale_price={product.display_sale_price}
+        href={`/products/${product.slug}`}
+      />
+    )
+  );
+
+  const trendingProductsCards = featuredProducts.data.map(
+    (product: Product, index: number) => (
+      <ProductCard
+        key={product.id}
+        name={product.name}
+        image={product.images[0].url}
+        display_price={product.display_price}
+        display_sale_price={product.display_sale_price}
         href={`/products/${product.slug}`}
       />
     )
@@ -139,16 +67,15 @@ export default async function Home() {
         link="/products"
       >
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
-          {trendingProducts.map((product) => (
+          {featuredProducts.data.map((product:Product) => (
             <ProductCard
-              key={product.name}
-              name={product.name}
-              image={product.image}
-              price={+product.price}
-              sale_price={product.sale_price ? +product.sale_price : null}
-              unit={product.unit}
-              href={product.href}
-            />
+            key={product.id}
+            name={product.name}
+            image={product?.images[0]?.url}
+            display_price={product.display_price}
+            display_sale_price={product.display_sale_price}
+            href={`/products/${product.slug}`}
+          />
           ))}
         </div>
       </HomePageSection>

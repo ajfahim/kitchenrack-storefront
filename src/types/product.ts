@@ -39,6 +39,8 @@ export type Product = {
   short_description: string;
   description: string;
   price: number;
+  display_price: number;
+  display_sale_price: number | null;
   sale_price: number | null;
   cost_price: number | null;
   unit: string;
