@@ -13,14 +13,12 @@ export function cn(...inputs: ClassValue[]) {
  */
 export function calculateDiscountPercentage(
   originalPrice: number,
-  salePrice: number | null | undefined
+  salePrice: number | null
 ): number {
   // If there's no sale price or sale price is greater than or equal to original price
   if (!salePrice || salePrice >= originalPrice) {
     return 0
   }
-  console.log("///////////////////////")
-  console.log({originalPrice, salePrice});
   
   const discount = originalPrice - salePrice
   const percentage = (discount / originalPrice) * 100
