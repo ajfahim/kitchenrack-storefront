@@ -1,8 +1,12 @@
+"use client";
+import VariantSelectSheet from "@/components/cart/VariantSelectSheet";
 import { calculateDiscountPercentage, formatPrice } from "@/lib/utils";
+import { useCartStore } from "@/store/cart-store";
+import { Product } from "@/types/product";
 import { ArrowRight, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 interface ProductCardProps {
   name: string;
@@ -10,6 +14,8 @@ interface ProductCardProps {
   display_price: number;
   display_sale_price?: number | undefined | null;
   href: string;
+  // Add the full product for variant logic
+  product: Product;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -18,7 +24,30 @@ const ProductCard: React.FC<ProductCardProps> = ({
   display_price,
   display_sale_price,
   href,
+  product,
 }) => {
+  const { addToCart } = useCartStore();
+  const [showVariantSheet, setShowVariantSheet] = useState(false);
+
+  const handleAddToCart = () => {
+    if (product.has_variants && product.variants.length > 0) {
+      setShowVariantSheet(true);
+    } else {
+      addToCart({
+        productId: product.id,
+        name: product.name,
+        image: product.images[0]?.url || "",
+        price:
+          product.display_sale_price &&
+          product.display_sale_price < product.display_price
+            ? product.display_sale_price
+            : product.display_price ?? product.price,
+        qty: 1,
+        unit: product.unit,
+      });
+    }
+  };
+
   // Calculate discount percentage based on original price and sale price
   const discountPercentage = calculateDiscountPercentage(
     display_price,
@@ -92,6 +121,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <button
             className="flex-1 bg-primary/10 hover:bg-primary/20 text-yellow-700 rounded p-2 flex items-center justify-center transition-all duration-300 border border-primary/20"
             aria-label="Add to cart"
+            onClick={handleAddToCart}
           >
             <ShoppingBag size={20} />
           </button>
@@ -105,6 +135,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
               className="transform group-hover/btn:translate-x-1 transition-transform duration-300"
             />
           </Link>
+          {/* Variant selection sheet/modal */}
+          {product.has_variants && (
+            <VariantSelectSheet
+              product={product}
+              open={showVariantSheet}
+              onClose={() => setShowVariantSheet(false)}
+            />
+          )}
         </div>
       </div>
     </div>

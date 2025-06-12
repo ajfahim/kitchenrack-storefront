@@ -26,12 +26,14 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useCartStore } from "@/store/cart-store";
+import CartSheet from "@/components/cart/CartSheet";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { logout } = useAuth();
-  // This would typically come from your cart state management
-  const cartTotal = 2499.99; // Example amount
+  const { totalPrice, cartItems } = useCartStore();
+  const [cartOpen, setCartOpen] = useState(false);
 
   const { user, isAuthenticated } = useAuthStore();
   console.log("🚀 ~ Navbar ~ user:", user);
@@ -85,15 +87,17 @@ const Navbar = () => {
           <div className="flex items-center space-x-4">
             {/* Cart Total */}
             <div className="hidden md:flex items-center mr-2">
-              <span className="text-sm font-bold">{formatTaka(cartTotal)}</span>
+              <span className="text-sm font-bold">{formatTaka(totalPrice)}</span>
             </div>
 
-            <Link href="/cart" className="relative">
+            {/* Cart Icon with Sheet */}
+            <button onClick={() => setCartOpen(true)} className="relative">
               <ShoppingBag className="h-6 w-6" />
               <span className="absolute -top-2 -right-2 bg-accent text-accent-foreground rounded-full text-xs w-5 h-5 flex items-center justify-center">
-                0
+                {cartItems.length}
               </span>
-            </Link>
+            </button>
+            <CartSheet open={cartOpen} onClose={() => setCartOpen(false)} />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar className="cursor-pointer">
@@ -155,7 +159,7 @@ const Navbar = () => {
                   <div className="flex items-center justify-between px-2">
                     <span className="text-sm font-medium">Cart Total:</span>
                     <span className="text-sm font-medium">
-                      {formatTaka(cartTotal)}
+                      {formatTaka(totalPrice)}
                     </span>
                   </div>
 

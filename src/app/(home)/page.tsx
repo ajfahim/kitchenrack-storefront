@@ -6,8 +6,6 @@ import { HomePageSection } from "@/components/home/HomePageSection";
 import { CustomCarousel } from "@/components/ui/custom-carousel";
 import { Product } from "@/types";
 
-
-
 export default async function Home() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_Backend_URL}/api/v1/products?featured=true`,
@@ -29,6 +27,7 @@ export default async function Home() {
         display_price={product.display_price}
         display_sale_price={product.display_sale_price}
         href={`/products/${product.slug}`}
+        product={product}
       />
     )
   );
@@ -42,6 +41,7 @@ export default async function Home() {
         display_price={product.display_price}
         display_sale_price={product.display_sale_price}
         href={`/products/${product.slug}`}
+        product={product}
       />
     )
   );
@@ -67,15 +67,16 @@ export default async function Home() {
         link="/products"
       >
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
-          {featuredProducts.data.map((product:Product) => (
+          {featuredProducts.data.map((product: Product) => (
             <ProductCard
-            key={product.id}
-            name={product.name}
-            image={product?.images[0]?.url}
-            display_price={product.display_price}
-            display_sale_price={product.display_sale_price}
-            href={`/products/${product.slug}`}
-          />
+              key={product.id}
+              name={product.name}
+              image={product?.images[0]?.url}
+              display_price={product.display_price}
+              display_sale_price={product.display_sale_price}
+              href={`/products/${product.slug}`}
+              product={product}
+            />
           ))}
         </div>
       </HomePageSection>
