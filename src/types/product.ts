@@ -5,7 +5,7 @@ export type Category = {
   name: string;
   icon: string;
   slug: string;
-}
+};
 export type ProductImage = {
   id: number;
   url: string;
@@ -14,7 +14,7 @@ export type ProductImage = {
   product_id: number;
   created_at: string;
   updated_at: string;
-}
+};
 
 export type ProductVariant = {
   id: number;
@@ -26,9 +26,9 @@ export type ProductVariant = {
   product_id: number;
   created_at: string;
   updated_at: string;
-}
+};
 
-export type ProductStatus = 'active' | 'inactive' | 'draft';
+export type ProductStatus = "active" | "inactive" | "draft";
 
 export type Product = {
   id: number;
@@ -39,8 +39,8 @@ export type Product = {
   short_description: string;
   description: string;
   price: number;
-  display_price: number;
-  display_sale_price: number | null;
+  display_price?: number;
+  display_sale_price?: number | null;
   sale_price: number | null;
   cost_price: number | null;
   unit: string;
@@ -54,5 +54,4 @@ export type Product = {
   categories: Category[];
   images: ProductImage[];
   variants: ProductVariant[];
-}
-
+};

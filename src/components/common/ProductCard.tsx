@@ -1,8 +1,8 @@
+import { calculateDiscountPercentage, formatPrice } from "@/lib/utils";
 import { ArrowRight, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { calculateDiscountPercentage, formatPrice } from "@/lib/utils";
 
 interface ProductCardProps {
   name: string;
@@ -14,18 +14,24 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({
   name,
-    image,
-    display_price,
-    display_sale_price,
-    href,
+  image,
+  display_price,
+  display_sale_price,
+  href,
 }) => {
   // Calculate discount percentage based on original price and sale price
-  const discountPercentage = calculateDiscountPercentage(display_price, display_sale_price);
-  console.log({discountPercentage});
-  
+  const discountPercentage = calculateDiscountPercentage(
+    display_price,
+    display_sale_price!
+  );
+  console.log({ discountPercentage });
+
   // Use the sale price if available, otherwise use the original price
-  const displayPrice = display_sale_price && display_sale_price < display_price ? display_sale_price : display_price;
-  
+  const displayPrice =
+    display_sale_price && display_sale_price < display_price
+      ? display_sale_price
+      : display_price;
+
   // Format prices for display
   const formattedOriginalPrice = formatPrice(display_price);
   const formattedDisplayPrice = formatPrice(displayPrice);
@@ -74,7 +80,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {/* Only show original price if there's a discount */}
           {display_sale_price && display_sale_price > 0 && (
             <div className="flex items-baseline">
-              <span className="text-gray-400 text-lg line-through">৳{formattedOriginalPrice}</span>
+              <span className="text-gray-400 text-lg line-through">
+                ৳{formattedOriginalPrice}
+              </span>
             </div>
           )}
         </div>

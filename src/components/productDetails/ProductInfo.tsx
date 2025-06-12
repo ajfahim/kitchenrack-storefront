@@ -1,107 +1,89 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge"; // Badge component for showing discounts, etc.
 
-import { FC } from "react";
 import DeliveryInfo from "./DeliveryInfo";
 
+import { calculateDiscountPercentage } from "@/lib/utils";
+import { Product, ProductVariant } from "@/types/product";
+import { useState } from "react";
+
 interface ProductInfoProps {
-  name: string;
-  price: number;
-  originalPrice: number;
-  discount: number; // In percentage
-  sizes: string[];
+  product: Product;
 }
 
-const ProductInfo: FC<ProductInfoProps> = ({
-  name,
-  price,
-  originalPrice,
-  discount,
-  sizes,
-}) => {
+export default function ProductInfo({ product }: ProductInfoProps) {
+  // Sort variants by price (lowest first)
+  const sortedVariants =
+    product.has_variants && product.variants.length > 0
+      ? [...product.variants].sort((a, b) => (a.price ?? 0) - (b.price ?? 0))
+      : [];
+
+  // Pick default: lowest price variant, or null if no variants
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
+    sortedVariants.length > 0 ? sortedVariants[0] : null
+  );
+
+  // Helper: get display values
+  const displayPrice = selectedVariant
+    ? selectedVariant.price
+    : product.display_price ?? product.price;
+
+  const displaySalePrice = selectedVariant
+    ? selectedVariant.sale_price
+    : product.display_sale_price ?? product.sale_price;
+
+  const discount = calculateDiscountPercentage(displayPrice, displaySalePrice);
+
   return (
     <div className="flex flex-col space-y-4">
-      {/* Product Name */}
-      <h1 className="text-4xl font-bold">{name}</h1>
+      <h1 className="text-4xl font-bold">{product.name}</h1>
 
       {/* Price Section */}
       <div className="flex items-center space-x-2">
-        <span className="text-3xl font-bold text-accent">{`৳ ${price}`}</span>
-        <span className="text-muted text-xl line-through">{`৳ ${originalPrice}`}</span>
-        <Badge
-          variant={"secondary"}
-          className="text-lg"
-        >{`${discount}% OFF`}</Badge>
+        <span className="text-3xl font-bold text-accent">
+          ৳ {displaySalePrice && displaySalePrice > 0 && displaySalePrice < displayPrice ? displaySalePrice : displayPrice}
+        </span>
+        {displaySalePrice && displaySalePrice > 0 && displaySalePrice < displayPrice && (
+          <span className="text-muted text-xl line-through">
+            ৳ {displayPrice}
+          </span>
+        )}
+        {discount > 0 && (
+          <Badge variant="secondary" className="text-lg">
+            {discount}% OFF
+          </Badge>
+        )}
       </div>
 
-      {/* Size Selection */}
-      <div className="space-y-2">
-        <p className="text-lg font-medium">Select Variation:</p>
-        <div className="flex gap-2">
-          {sizes.map((size) => (
-            <button
-              key={size}
-              className="px-4 py-2 border rounded-md border-primary hover:bg-primary hover:text-primary-foreground"
-            >
-              {size}
-            </button>
-          ))}
+      {/* Variant Selector */}
+      {product.has_variants && sortedVariants.length > 0 && (
+        <div className="space-y-2">
+          <p className="text-lg font-medium">Select Variant:</p>
+          <div className="flex gap-2">
+            {sortedVariants.map((variant) => (
+              <button
+                key={variant.id}
+                className={`px-4 py-2 border rounded-md ${
+                  selectedVariant?.id === variant.id
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-gray-300 hover:bg-gray-100"
+                }`}
+                onClick={() => setSelectedVariant(variant)}
+                type="button"
+              >
+                {variant.name}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* delivery Info */}
+      {/* Delivery Info */}
       <DeliveryInfo />
-      <p className="text-lg">
-        কুশন কভার প্রোডাক্ট ডিটেইলসঃ খুবই উন্নত মানের (300GSM) ভেলভেট, গ্লসি ও
-        আরামদায়ক কাপড়। ডিজিটাল প্রিন্ট। অত্যন্ত মানসম্মত উপাদান দিয়ে প্রিন্ট করা
-        হয়েছে যা খুবই টেকসই। কম দামি সুতি আর বাটিক প্রিন্ট নয়। দুই দিকেই এক ই
-        কাপড় ও প্রিন্ট। উভয় পাশে ব্যবহার করতে পারবেন। জিপার টি ভিতরের দিকে থাকায়
-        সেটা চোখে পরে না, যা এটার সৌন্দর্যকে আরও বাড়িয়ে তোলে এবং সহজে পরিস্কার
-        করা যায়। দুই পাশে রিভার্স মেলানো । কালার গ্যারান্টি। কুশন কভার প্রোডাক্ট
-        ডিটেইলসঃ খুবই উন্নত মানের (300GSM) ভেলভেট, গ্লসি ও আরামদায়ক কাপড়।
-        ডিজিটাল প্রিন্ট। অত্যন্ত মানসম্মত উপাদান দিয়ে প্রিন্ট করা হয়েছে যা খুবই
-        টেকসই। কম দামি সুতি আর বাটিক প্রিন্ট নয়। দুই দিকেই এক ই কাপড় ও প্রিন্ট।
-        উভয় পাশে ব্যবহার করতে পারবেন। জিপার টি ভিতরের দিকে থাকায় সেটা চোখে পরে
-        না, যা এটার সৌন্দর্যকে আরও বাড়িয়ে তোলে এবং সহজে পরিস্কার করা যায়। দুই
-        পাশে রিভার্স মেলানো । কালার গ্যারান্টি। কুশন কভার প্রোডাক্ট ডিটেইলসঃ
-        খুবই উন্নত মানের (300GSM) ভেলভেট, গ্লসি ও আরামদায়ক কাপড়। ডিজিটাল
-        প্রিন্ট। অত্যন্ত মানসম্মত উপাদান দিয়ে প্রিন্ট করা হয়েছে যা খুবই টেকসই।
-        কম দামি সুতি আর বাটিক প্রিন্ট নয়। দুই দিকেই এক ই কাপড় ও প্রিন্ট। উভয়
-        পাশে ব্যবহার করতে পারবেন। জিপার টি ভিতরের দিকে থাকায় সেটা চোখে পরে না,
-        যা এটার সৌন্দর্যকে আরও বাড়িয়ে তোলে এবং সহজে পরিস্কার করা যায়। দুই পাশে
-        রিভার্স মেলানো । কালার গ্যারান্টি। কুশন কভার প্রোডাক্ট ডিটেইলসঃ খুবই
-        উন্নত মানের (300GSM) ভেলভেট, গ্লসি ও আরামদায়ক কাপড়। ডিজিটাল প্রিন্ট।
-        অত্যন্ত মানসম্মত উপাদান দিয়ে প্রিন্ট করা হয়েছে যা খুবই টেকসই। কম দামি
-        সুতি আর বাটিক প্রিন্ট নয়। দুই দিকেই এক ই কাপড় ও প্রিন্ট। উভয় পাশে
-        ব্যবহার করতে পারবেন। জিপার টি ভিতরের দিকে থাকায় সেটা চোখে পরে না, যা
-        এটার সৌন্দর্যকে আরও বাড়িয়ে তোলে এবং সহজে পরিস্কার করা যায়। দুই পাশে
-        রিভার্স মেলানো । কালার গ্যারান্টি। কুশন কভার প্রোডাক্ট ডিটেইলসঃ খুবই
-        উন্নত মানের (300GSM) ভেলভেট, গ্লসি ও আরামদায়ক কাপড়। ডিজিটাল প্রিন্ট।
-        অত্যন্ত মানসম্মত উপাদান দিয়ে প্রিন্ট করা হয়েছে যা খুবই টেকসই। কম দামি
-        সুতি আর বাটিক প্রিন্ট নয়। দুই দিকেই এক ই কাপড় ও প্রিন্ট। উভয় পাশে
-        ব্যবহার করতে পারবেন। জিপার টি ভিতরের দিকে থাকায় সেটা চোখে পরে না, যা
-        এটার সৌন্দর্যকে আরও বাড়িয়ে তোলে এবং সহজে পরিস্কার করা যায়। দুই পাশে
-        রিভার্স মেলানো । কালার গ্যারান্টি। কুশন কভার প্রোডাক্ট ডিটেইলসঃ খুবই
-        উন্নত মানের (300GSM) ভেলভেট, গ্লসি ও আরামদায়ক কাপড়। ডিজিটাল প্রিন্ট।
-        অত্যন্ত মানসম্মত উপাদান দিয়ে প্রিন্ট করা হয়েছে যা খুবই টেকসই। কম দামি
-        সুতি আর বাটিক প্রিন্ট নয়। দুই দিকেই এক ই কাপড় ও প্রিন্ট। উভয় পাশে
-        ব্যবহার করতে পারবেন। জিপার টি ভিতরের দিকে থাকায় সেটা চোখে পরে না, যা
-        এটার সৌন্দর্যকে আরও বাড়িয়ে তোলে এবং সহজে পরিস্কার করা যায়। দুই পাশে
-        রিভার্স মেলানো । কালার গ্যারান্টি। কুশন কভার প্রোডাক্ট ডিটেইলসঃ খুবই
-        উন্নত মানের (300GSM) ভেলভেট, গ্লসি ও আরামদায়ক কাপড়। ডিজিটাল প্রিন্ট।
-        অত্যন্ত মানসম্মত উপাদান দিয়ে প্রিন্ট করা হয়েছে যা খুবই টেকসই। কম দামি
-        সুতি আর বাটিক প্রিন্ট নয়। দুই দিকেই এক ই কাপড় ও প্রিন্ট। উভয় পাশে
-        ব্যবহার করতে পারবেন। জিপার টি ভিতরের দিকে থাকায় সেটা চোখে পরে না, যা
-        এটার সৌন্দর্যকে আরও বাড়িয়ে তোলে এবং সহজে পরিস্কার করা যায়। দুই পাশে
-        রিভার্স মেলানো । কালার গ্যারান্টি। কুশন কভার প্রোডাক্ট ডিটেইলসঃ খুবই
-        উন্নত মানের (300GSM) ভেলভেট, গ্লসি ও আরামদায়ক কাপড়। ডিজিটাল প্রিন্ট।
-        অত্যন্ত মানসম্মত উপাদান দিয়ে প্রিন্ট করা হয়েছে যা খুবই টেকসই। কম দামি
-        সুতি আর বাটিক প্রিন্ট নয়। দুই দিকেই এক ই কাপড় ও প্রিন্ট। উভয় পাশে
-        ব্যবহার করতে পারবেন। জিপার টি ভিতরের দিকে থাকায় সেটা চোখে পরে না, যা
-        এটার সৌন্দর্যকে আরও বাড়িয়ে তোলে এবং সহজে পরিস্কার করা যায়। দুই পাশে
-        রিভার্স মেলানো । কালার গ্যারান্টি।
-      </p>
+
+      {/* Description */}
+      <p className="text-lg">{product.description}</p>
     </div>
   );
-};
-
-export default ProductInfo;
+}
