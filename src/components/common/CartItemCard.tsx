@@ -2,6 +2,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { ChevronDown, Trash } from "lucide-react";
 import Image from "next/image";
 import CartSheetVariantModal from "../cart/CartSheetVariantModal";
@@ -24,7 +25,7 @@ export default function CartItemCard({
       key={item.productId + "-" + (item.variantId || "noVar")}
       className="mb-4 border border-gray-200 rounded-xl shadow-sm"
     >
-      <CardContent>
+      <CardContent className="pb-2 px-3">
         <div className="relative flex gap-4 items-stretch py-3">
           {/* Trash Icon Top Right */}
           <Button
@@ -34,7 +35,7 @@ export default function CartItemCard({
             onClick={() =>
               removeFromCart(item.productId, item.variantId || null)
             }
-            className="absolute top-1 -right-5 text-accent"
+            className="absolute top-1 -right-1 text-accent"
             tabIndex={0}
           >
             <Trash className="w-5 h-5" />
@@ -133,6 +134,7 @@ export default function CartItemCard({
           </div>
           <div className="flex items-center gap-2">
             <Button
+              disabled={item.qty === 1}
               variant="outline"
               size="icon"
               aria-label="Decrease quantity"
@@ -143,7 +145,9 @@ export default function CartItemCard({
                   Math.max(1, item.qty - 1)
                 )
               }
-              className="border-gray-300 w-8 h-8"
+              className={cn("border-accent w-8 h-8", {
+                "border-gray-500": item.qty === 1,
+              })}
             >
               -
             </Button>
@@ -157,7 +161,7 @@ export default function CartItemCard({
               onClick={() =>
                 updateQty(item.productId, item.variantId || null, item.qty + 1)
               }
-              className="border-gray-300 w-8 h-8"
+              className="border-accent w-8 h-8"
             >
               +
             </Button>

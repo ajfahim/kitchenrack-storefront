@@ -79,7 +79,15 @@ export const useCartStore = create<CartState>()(
 
       updateQty: (productId, variantId, qty) => {
         const newCart = get().cartItems.map((ci) => {
-          if (ci.productId === productId && ci.variantId === variantId) {
+          if (
+            ci.productId === productId &&
+            (
+              // Both variantId and ci.variantId are nullish (undefined or null)
+              ((variantId == null || variantId === undefined) && (ci.variantId == null || ci.variantId === undefined)) ||
+              // Both are defined and equal
+              (variantId != null && ci.variantId != null && ci.variantId === variantId)
+            )
+          ) {
             return { ...ci, qty };
           }
           return ci;
