@@ -2,9 +2,17 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { useCartStore } from "@/store/cart-store";
-import { ArrowRight, ChevronDown, Trash } from "lucide-react";
+import { ArrowRight, ChevronDown, Trash, Trash2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import CartSheetVariantModal from "./CartSheetVariantModal";
 
@@ -18,21 +26,21 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
     useCartStore();
   const [variantModalFor, setVariantModalFor] = useState<number | null>(null);
 
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-end bg-black bg-opacity-40">
-      <div className="bg-white w-full max-w-md h-full flex flex-col p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">
+    <Sheet
+      open={open}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <SheetContent side="right" className="p-3 flex flex-col h-full">
+        <SheetHeader>
+          <SheetTitle className="text-xl font-bold">
             Cart List ({cartItems.length} Item
             {cartItems.length !== 1 ? "s" : ""})
-          </h2>
-          <button onClick={onClose} className="text-2xl">
-            &times;
-          </button>
-        </div>
-        <div className="flex-1 overflow-y-auto">
+          </SheetTitle>
+        </SheetHeader>
+        <div className="flex-1 overflow-y-auto mt-4">
           {cartItems.length === 0 ? (
             <div className="text-center text-gray-500 mt-10">Cart is empty</div>
           ) : (
@@ -191,28 +199,38 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
             ))
           )}
         </div>
-        <div className="mt-4 border-t pt-4">
-          <div className="flex justify-between font-semibold text-lg">
-            <span>Total:</span>
-            <span>৳ {totalPrice}</span>
+        <SheetFooter className="!flex !flex-col">
+          <div>
+            <div className="font-bold text-lg">
+              <span>Total:</span>
+              <span>৳ {totalPrice}</span>
+            </div>
+            <div className="flex justify-between gap-2 mt-4">
+              <Button
+                variant="outline"
+                onClick={clearCart}
+                className="gap-2 py-5 font-bold text-xl border-accent text-accent hover:bg-accent hover:text-white group/btn"
+                aria-label="Clear Cart"
+              >
+                <Trash2 className="w-4 h-4 text-accent group-hover/btn:text-white" />
+                Clear Cart
+              </Button>
+              <Button
+                asChild
+                className="flex-1 bg-primary hover:bg-primary-hover text-primary-foreground rounded py-5 px-3 flex items-center justify-center gap-1 transition-all duration-300 group/btn text-xl font-bold"
+              >
+                <Link href="/checkout">
+                  Buy Now
+                  <ArrowRight
+                    size={18}
+                    className="transform group-hover/btn:translate-x-1 transition-transform duration-300"
+                  />
+                </Link>
+              </Button>
+            </div>
           </div>
-          <div className="flex gap-2 mt-4">
-            <button
-              onClick={clearCart}
-              className="px-4 py-2 bg-gray-200 rounded"
-            >
-              Clear Cart
-            </button>
-            <button className="flex-1 bg-primary hover:bg-primary-hover text-primary-foreground rounded py-2 px-3 flex items-center justify-center gap-1 transition-all duration-300 group/btn text-xl font-bold">
-              Buy Now
-              <ArrowRight
-                size={18}
-                className="transform group-hover/btn:translate-x-1 transition-transform duration-300"
-              />
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 }
