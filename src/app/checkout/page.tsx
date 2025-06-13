@@ -1,10 +1,9 @@
 // Checkout Page (shadcn/ui + react-hook-form + zod)
-import React from "react";
-import { OrderSummary } from "@/components/checkout/OrderSummary";
-import { CheckoutForm } from "@/components/checkout/CheckoutForm";
-import { PaymentOptions } from "@/components/checkout/PaymentOptions";
-import { DeliveryMethod } from "@/components/checkout/DeliveryMethod";
 import { CartProductList } from "@/components/checkout/CartProductList";
+import { CheckoutForm } from "@/components/checkout/CheckoutForm";
+import { DeliveryMethod } from "@/components/checkout/DeliveryMethod";
+import { OrderSummary } from "@/components/checkout/OrderSummary";
+import { PaymentOptions } from "@/components/checkout/PaymentOptions";
 import { Button } from "@/components/ui/button";
 
 export default function CheckoutPage() {
@@ -21,9 +20,8 @@ export default function CheckoutPage() {
         <Button className="w-full text-xl font-bold py-5">Confirm Order</Button>
       </div>
       {/* Column 2: Cart Products */}
-      <div className="bg-muted rounded-lg p-4 shadow w-full max-w-xl">
-        <CartProductList />
-      </div>
+
+      <CartProductList />
     </div>
   );
 }
