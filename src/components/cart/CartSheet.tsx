@@ -2,15 +2,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useCartStore } from "@/store/cart-store";
-import { Trash } from "lucide-react";
+import { ArrowRight, ChevronDown, Trash } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import CartSheetVariantModal from "./CartSheetVariantModal";
@@ -48,92 +41,106 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
                 key={item.productId + "-" + (item.variantId || "noVar")}
                 className="mb-4 border border-gray-200 rounded-xl shadow-sm"
               >
-                <CardContent className="relative flex gap-4 items-stretch py-3 px-4">
-                  {/* Trash Icon Top Right */}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label="Remove from cart"
-                    onClick={() =>
-                      removeFromCart(item.productId, item.variantId || null)
-                    }
-                    className="absolute top-1 right-1 text-accent"
-                    tabIndex={0}
-                  >
-                    <Trash className="w-5 h-5" />
-                  </Button>
-                  {/* Product Image */}
-                  <div className="flex-shrink-0 flex flex-col items-center justify-between">
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      width={70}
-                      height={70}
-                      className="rounded-lg object-cover border border-gray-100 w-[70px] h-[70px]"
-                    />
-                    {/* Variant Dropdown (if options available) */}
-                    {item.variantOptions && item.variantOptions.length > 0 && (
-                      <Select
-                        value={item.variantId}
-                        onValueChange={(value) =>
-                          updateQty(item.productId, value, item.qty)
-                        }
-                      >
-                        <SelectTrigger className="mt-2 w-[110px] h-8 text-xs rounded border-gray-300">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {item.variantOptions.map((v: any) => (
-                            <SelectItem
-                              key={v.id}
-                              value={v.id}
-                              className="text-xs"
-                            >
-                              {v.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
+                <CardContent>
+                  <div className="relative flex gap-4 items-stretch py-3">
+                    {/* Trash Icon Top Right */}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label="Remove from cart"
+                      onClick={() =>
+                        removeFromCart(item.productId, item.variantId || null)
+                      }
+                      className="absolute top-1 -right-5 text-accent"
+                      tabIndex={0}
+                    >
+                      <Trash className="w-5 h-5" />
+                    </Button>
+                    {/* Product Image */}
+                    <div className="flex-shrink-0 flex flex-col items-center justify-between">
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        width={70}
+                        height={70}
+                        className="rounded-lg object-cover border border-gray-100 w-[70px] h-[70px]"
+                      />
+                    </div>
+                    {/* Main Content */}
+                    <div className="flex flex-col flex-1 justify-between">
+                      {/* Badges */}
+                      <div className="flex gap-2 items-center mb-1">
+                        {item.discount && (
+                          <Badge
+                            variant="destructive"
+                            className="px-2 py-0.5 text-[11px] font-bold"
+                          >
+                            {item.discount}% OFF
+                          </Badge>
+                        )}
+                      </div>
+                      {/* Name and Code Row */}
+                      <div className="flex justify-between items-center mb-1">
+                        <div className="font-semibold text-base line-clamp-1">
+                          {item.name}
+                        </div>
+                      </div>
+
+                      {/* Price Row */}
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-2xl font-bold text-accent">
+                          ৳
+                          {item.variant &&
+                          item.variant.sale_price &&
+                          item.variant.sale_price < item.variant.price
+                            ? item.variant.sale_price
+                            : item.variant && item.variant.price
+                            ? item.variant.price
+                            : item.price}
+                        </span>
+                        {item.variant &&
+                          item.variant.sale_price &&
+                          item.variant.sale_price < item.variant.price && (
+                            <span className="text-gray-400 line-through text-lg">
+                              ৳{item.variant.price}
+                            </span>
+                          )}
+                        {item.variant &&
+                          item.variant.sale_price &&
+                          item.variant.sale_price < item.variant.price && (
+                            <span className="bg-accent text-white text-xs font-bold px-2 py-1 rounded">
+                              {Math.round(
+                                ((item.variant.price -
+                                  item.variant.sale_price) /
+                                  item.variant.price) *
+                                  100
+                              )}
+                              % OFF
+                            </span>
+                          )}
+                      </div>
+                    </div>
                   </div>
-                  {/* Main Content */}
-                  <div className="flex flex-col flex-1 justify-between">
-                    {/* Badges */}
-                    <div className="flex gap-2 items-center mb-1">
-                      {item.isExclusive && (
-                        <Badge className="bg-[#ff9800] text-white px-2 py-0.5 text-[11px] font-bold">
-                          এক্সক্লুসিভ
-                        </Badge>
-                      )}
-                      {item.discount && (
-                        <Badge
-                          variant="destructive"
-                          className="px-2 py-0.5 text-[11px] font-bold"
-                        >
-                          {item.discount}% OFF
-                        </Badge>
-                      )}
-                    </div>
-                    {/* Name and Code Row */}
-                    <div className="flex justify-between items-center mb-1">
-                      <div className="font-semibold text-base line-clamp-1">
-                        {item.name}
-                      </div>
-                      <div className="text-xs text-gray-400 font-semibold ml-2 whitespace-nowrap">
-                        {item.code}
-                      </div>
-                    </div>
+                  {/* Quantity Row and Selected Variant Button */}
+                  <div className="flex justify-between items-center gap-2 mt-1">
                     {/* Selected Variant Button */}
                     <div className="mb-2">
-                      <button
-                        className="inline-flex items-center px-3 py-1 border border-gray-300 rounded text-[13px] font-medium bg-white shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition cursor-pointer"
-                        style={{ minWidth: 110 }}
-                        onClick={() => setVariantModalFor(item.productId)}
-                        aria-label="Change variant"
-                      >
-                        {item.variantName || item.variant?.name}
-                        <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
-                      </button>
+                      {item.product.has_variants &&
+                      item.product.variants.length > 0 ? (
+                        <Badge
+                          variant="outline"
+                          className="cursor-pointer text-base"
+                          onClick={() => setVariantModalFor(item.productId)}
+                          aria-label="Change variant"
+                        >
+                          {item.variantName || item.variant?.name}{" "}
+                          <ChevronDown size={16} />
+                        </Badge>
+                      ) : (
+                        <div className="text-xs text-gray-400 font-semibold ml-2 whitespace-nowrap">
+                          {/* {item.code} */}
+                        </div>
+                      )}
                       {/* Variant Modal */}
                       {variantModalFor === item.productId && (
                         <CartSheetVariantModal
@@ -143,40 +150,7 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
                         />
                       )}
                     </div>
-                    {/* Price Row */}
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-2xl font-bold text-accent">
-                        ৳
-                        {item.variant &&
-                        item.variant.sale_price &&
-                        item.variant.sale_price < item.variant.price
-                          ? item.variant.sale_price
-                          : item.variant && item.variant.price
-                          ? item.variant.price
-                          : item.price}
-                      </span>
-                      {item.variant &&
-                        item.variant.sale_price &&
-                        item.variant.sale_price < item.variant.price && (
-                          <span className="text-gray-400 line-through text-lg">
-                            ৳{item.variant.price}
-                          </span>
-                        )}
-                      {item.variant &&
-                        item.variant.sale_price &&
-                        item.variant.sale_price < item.variant.price && (
-                          <span className="bg-accent text-white text-xs font-bold px-2 py-1 rounded">
-                            {Math.round(
-                              ((item.variant.price - item.variant.sale_price) /
-                                item.variant.price) *
-                                100
-                            )}
-                            % OFF
-                          </span>
-                        )}
-                    </div>
-                    {/* Quantity Row */}
-                    <div className="flex justify-end items-center gap-2 mt-2">
+                    <div className="flex items-center gap-2">
                       <Button
                         variant="outline"
                         size="icon"
@@ -229,8 +203,12 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
             >
               Clear Cart
             </button>
-            <button className="px-4 py-2 bg-primary text-white rounded">
+            <button className="flex-1 bg-primary hover:bg-primary-hover text-primary-foreground rounded py-2 px-3 flex items-center justify-center gap-1 transition-all duration-300 group/btn text-xl font-bold">
               Buy Now
+              <ArrowRight
+                size={18}
+                className="transform group-hover/btn:translate-x-1 transition-transform duration-300"
+              />
             </button>
           </div>
         </div>

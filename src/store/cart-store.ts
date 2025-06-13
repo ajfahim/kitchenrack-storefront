@@ -33,7 +33,7 @@ export const useCartStore = create<CartState>()(
       cartItems: [],
       totalPrice: 0,
 
-      addToCart: (item) => {
+      addToCart: (item: CartItem) => {
         const { cartItems } = get();
         // Check if already in cart
         const idx = cartItems.findIndex(
@@ -56,11 +56,20 @@ export const useCartStore = create<CartState>()(
       },
 
       removeFromCart: (productId, variantId) => {
-        const newCart = get().cartItems.filter(
-          (ci) =>
-            ci.productId !== productId ||
-            (variantId !== undefined && ci.variantId !== variantId)
-        );
+        const newCart = get().cartItems.filter((ci) => {
+          if (ci.productId !== productId) return true;
+          // If both variantId and ci.variantId are nullish (undefined or null), remove this item
+          if (
+            (variantId == null || variantId === undefined) &&
+            (ci.variantId == null || ci.variantId === undefined)
+          )
+            return false;
+          // If both are defined, remove only if variantId matches
+          if (variantId != null && ci.variantId != null)
+            return ci.variantId !== variantId;
+          // Otherwise, keep the item
+          return true;
+        });
         set({
           cartItems: newCart,
           totalPrice: newCart.reduce((sum, i) => sum + i.price * i.qty, 0),

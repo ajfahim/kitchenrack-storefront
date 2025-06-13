@@ -44,6 +44,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
             : product.display_price ?? product.price,
         qty: 1,
         unit: product.unit,
+        product,
+        variant: product.variants[0],
       });
     }
   };
